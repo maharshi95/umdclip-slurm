@@ -38,8 +38,6 @@ export MODEL_NAME=$2
 # Output directory  
 export OUTPUT_DIR=$3
 
-mkdir -p $OUTPUT_DIR
-
 export NUM_GPUS_PER_NODE=2
 export NUM_GPUS_TOTAL=$((NUM_GPUS_PER_NODE * SLURM_ARRAY_TASK_COUNT))
 echo "NUM_GPUS_PER_NODE: $NUM_GPUS_PER_NODE, SLURM_ARRAY_TASK_COUNT: $SLURM_ARRAY_TASK_COUNT, NUM_GPUS_TOTAL: $NUM_GPUS_TOTAL"
@@ -50,16 +48,15 @@ echo "Total shards: $N_SHARDS"
 for ((i=0; i<$NUM_GPUS_PER_NODE; i++)); do
     NODE_INDEX=$SLURM_ARRAY_TASK_ID
     SHARD_ID=$((NODE_INDEX * NUM_GPUS_PER_NODE + i))
-    OUTPUT_PATH=$OUTPUT_DIR/shard-$((SHARD_ID + 1)).npy
     echo "Processing shard $SHARD_ID on GPU $i"
-    echo "Output path: $OUTPUT_PATH"
+    echo "OUTPUT DIR: $OUTPUT_DIR"
     CUDA_VISIBLE_DEVICES=$i \
     python -u scripts/index_beir.py \
         --model=$MODEL_NAME \
         --shard-id=$SHARD_ID \
         --n-shards=$N_SHARDS \
-        --input=$INPUT_DATA \
-        --output=$OUTPUT_PATH &
+        --dataset=$INPUT_DATA \
+        --output-dir=$OUTPUT_DIR &
 done
 
 wait

@@ -19,7 +19,7 @@ DEFAULT_MODEL="sentence-transformers/all-MiniLM-L6-v2"
 
 DATASET_NAME=$1 # E.g. "dataset/name"
 MODEL_PATH=${2:-$DEFAULT_MODEL}
-OUTPUT_DIR=${3:-"/fs/clip-scratch/mgor/indexes/beir"}
+OUTPUT_DIR=${3:-"/fs/clip-scratch/mgor/indexes/"}
 
 echo "Dataset: $DATASET_NAME"
 echo "Model: $MODEL_PATH"
