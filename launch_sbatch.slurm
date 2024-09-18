@@ -7,8 +7,6 @@
 #SBATCH --qos=default
 #SBATCH --time=01:00:00
 
-args="scripts/word_count.py data/essay.txt -o data/essay-word-count.json"
-
 # The difference between `python $args` and `srun python $args`:
 #
 # 1. `python $args`:
@@ -25,4 +23,7 @@ args="scripts/word_count.py data/essay.txt -o data/essay-word-count.json"
 # For this single-node job, both methods will work similarly.
 # However, using `srun` is generally recommended for better SLURM integration.
 
-srun python $args
+program="python scripts/word_count.py"
+args="data/essay.txt -o data/essay-word-count.json"
+
+srun $program $args
